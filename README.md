@@ -10,9 +10,9 @@ Fork this repo.
 ## Configuration
 The application requires the following environmental variables in [`manifests/autograder.env`](manifests/autograder.env):
 
-- `USERNAME` -- custom username for to autograder API (prevent unauthorized access)
-- `PASSOWRD` -- custom password authenticating to autograder API (prevent unauthorized access)
-- `autograderv2_REPO_SSH_URL` -- git URL of your autograding tests
+- `AUTOGRADER_USERNAME` -- custom username for to autograder API (prevent unauthorized access)
+- `AUTOGRADER_PASSWORD` -- custom password authenticating to autograder API (prevent unauthorized access)
+- `autograder_REPO_SSH_URL` -- git URL of your autograding tests
 - `REPO_PATH_TOASSIGNMENTS` -- path within your GitHub repo which contains the assignments in the format `repo_name/path_to_assignments` where each assignment has the format provided in this repo of `assignment_name/autograder`
 
 Also, you need to generate a [deploy key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys) for your repository with the autograder source code and paste its value in [`manifests/ssh-privatekey`](manifests/ssh-privatekey).
@@ -22,9 +22,9 @@ This is the directory structure of our tests in our private autograder repo, whi
 ```
 .
 ├── 2024
-│   ├── **{assignment_name}**
+│   ├── {assignment_name}
 │   │   ├── Makefile
-│   │   ├── **autograder**
+│   │   ├── autograder
 │   │   │   ├── Dockerfile
 │   │   │   ├── README.md
 │   │   │   ├── bundle.sh
@@ -34,19 +34,19 @@ This is the directory structure of our tests in our private autograder repo, whi
 │   │   │   ├── setup.sh
 │   │   │   ├── test_bundle.sh
 │   │   │   └── tests -> ../tests
-│   │   └── **tests**
+│   │   └── tests
 │   │       ├── README.md
 │   │       ├── __init__.py
 │   │       ├── test0.c
 │   │       └── test1.c
 ```
 
-## Deploying the application
+## Deploying the Application
 After following the configuration steps, you can deploy the manifests into your current namespace by running:
 
 ```
 kubectl apply -k manifests
-oc start-build autograderv2-bc
+oc start-build autograder-bc
 ```
 
 #### Reapply Deployment
@@ -63,5 +63,25 @@ If you want to see what the manifests look like you can run:
 kubectl kustomize manifests
 ```
 
-# Gradescope Autograder
+## Gradescope 
+
 Follow the steps provided in [`gradescope/README.md`](gradescope/README.md) to set up the gradescope autograder which invokes your OpenShift autograder API. One of the arguments it passes is the assignment name, which allows the OpenShift service to grade multiple different assignments based on this form value in the curl request without needing to reapply the deployment.
+
+
+## Deployment Manifests 
+
+- build-config.yaml: Specifies the build config, which creates an image stream to the autograder container.
+
+- deployment.yaml: Specifies the deployment, which builds the init container as well as the autograder container from the previous image stream.
+
+- hpa.yaml: Defines the [horizontal pod autoscaler](https://docs.openshift.com/container-platform/4.15/nodes/pods/nodes-pods-autoscaling.html). Scales the deployment based on resource utilization.
+
+- image-stream.yaml: Defines the imagestream for the autograder image.
+
+- kustomization.yaml: Defines the other resources for deployment. Also defines a secret in OpenShift from the ssh-privatekey file.
+
+- route.yaml: Specifies the route that the autograder service can be reached at.
+
+- service.yaml: Defines the autograder service IP, port, and application. 
+
+

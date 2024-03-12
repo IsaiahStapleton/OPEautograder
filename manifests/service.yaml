@@ -1,8 +1,8 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: autograderv2-service
-  namespace: ece440spring2024-619f12
+  name: autograder-service
+  namespace: ope-test
 spec:
   clusterIP: 172.30.164.9
   ipFamilies:
@@ -16,4 +16,4 @@ spec:
     - 172.30.164.9
   type: ClusterIP
   selector:
-    app: autograderv2
+    app: autograder

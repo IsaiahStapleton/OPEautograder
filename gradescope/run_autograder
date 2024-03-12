@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-LINK="https://autograderv2-service-ece440spring2024-619f12.apps.shift.nerc.mghpcc.org"
-USERNAME="my_username"
-PASSWORD="my_password"
+LINK="https://autograder-service-ope-test.apps.shift.nerc.mghpcc.org"
+USERNAME="istaplet"
+PASSWORD="123"
 ASSIGNMENT_NAME="challenge-threads"
 
 cd /autograder/submission

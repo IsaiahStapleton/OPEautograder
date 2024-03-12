@@ -1,6 +1,6 @@
 # Setup
 
-Set the environmental variables in [`run_autograder`](run_autograder) to match your OpenShift API configuration from [`autograderv2.env`](../manifests/autograderv2.env).
+Set the environmental variables in [`run_autograder`](run_autograder) to match your OpenShift API configuration from [`autograder.env`](../manifests/autograder.env).
 
 - `LINK` -- link to your OpenShift route 
   - *you can get this link by running `oc describe route/autograder-route | grep Requested`*

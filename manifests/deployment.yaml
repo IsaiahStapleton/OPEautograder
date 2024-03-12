@@ -1,18 +1,18 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: autograderv2-deployment
+  name: autograder-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: autograderv2
+      app: autograder
   template:
     metadata:
       annotations:
         alpha.image.policy.openshift.io/resolve-names: '*'
       labels:
-        app: autograderv2
+        app: autograder
     spec:
       volumes:
       - name: app
@@ -26,14 +26,14 @@ spec:
         env:
         - name: HOME
           value: /home/init
-        - name: autograderv2_DEPLOY_KEY
+        - name: autograder_DEPLOY_KEY
           valueFrom:
             secretKeyRef:
-              name: autograderv2-deploy-key
+              name: autograder-deploy-key
               key: ssh-privatekey
         envFrom:
         - secretRef:
-            name: autograderv2-config   
+            name: autograder-config   
               
 
         command:
@@ -43,9 +43,9 @@ spec:
           cd $HOME
           mkdir ~/.ssh
           touch ~/.ssh/known_hosts
-          echo "${autograderv2_DEPLOY_KEY}\n" > ~/.ssh/id_ed25519
+          echo "${autograder_DEPLOY_KEY}\n" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" git clone ${autograderv2_REPO_SSH_URL}
+          GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" git clone ${autograder_REPO_SSH_URL}
           rm -rf ~/.ssh/id_ed25519
           find . -type d -name 'solutions' -exec rm -rf {} +
 
@@ -54,8 +54,8 @@ spec:
           mountPath: /home/init
 
       containers:
-      - name: autograderv2-is
-        image: autograderv2-is:latest
+      - name: autograder-container
+        image: autograder-is:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -63,7 +63,7 @@ spec:
         env:
         envFrom:
         - secretRef:
-            name: autograderv2-config
+            name: autograder-config
         resources:
           limits:
             cpu: 100m

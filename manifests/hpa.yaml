@@ -1,11 +1,11 @@
 kind: HorizontalPodAutoscaler
 apiVersion: autoscaling/v2
 metadata:
-  name: autograderv2-hpa
+  name: autograder-hpa
 spec:
   scaleTargetRef:
     kind: Deployment
-    name: autograderv2-deployment
+    name: autograder-deployment
     apiVersion: apps/v1
   minReplicas: 1
   maxReplicas: 4

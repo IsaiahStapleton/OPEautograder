@@ -5,8 +5,8 @@ import concurrent.futures
 import json
 import sys
 
-LINK = "https://autograderv2-service-ece440spring2024-619f12.apps.shift.nerc.mghpcc.org"
-UNAME_PWD = "my_username:my_password"
+LINK = "https://autograder-service-ope-test.apps.shift.nerc.mghpcc.org"
+UNAME_PWD = "istaplet:123"
 
 # request with correct solution
 def make_request1():
@@ -43,9 +43,9 @@ def main():
             if i % 10 == 0:
                 time.sleep(2)
             if i % 2 == 0:  # Even step
-                futures.append(executor.submit(make_request2, UNAME_PWD))
+                futures.append(executor.submit(make_request2))
             else:  # Odd step
-                futures.append(executor.submit(make_request1, UNAME_PWD))        
+                futures.append(executor.submit(make_request1))        
         # Wait for the futures to complete and get the results
         results = [future.result() for future in concurrent.futures.as_completed(futures)]
         
