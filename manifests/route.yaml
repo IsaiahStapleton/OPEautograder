@@ -2,7 +2,7 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: autograder-route
-  namespace: ope-test
+  namespace: ece440spring2024-619f12
   annotations:
     haproxy.router.openshift.io/timeout: 10m
     openshift.io/host.generated: 'true'

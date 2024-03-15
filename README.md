@@ -10,7 +10,7 @@ Fork this repo.
 ## Configuration
 The application requires the following environmental variables in [`manifests/autograder.env`](manifests/autograder.env):
 
-- `AUTOGRADER_USERNAME` -- custom username for to autograder API (prevent unauthorized access)
+- `AUTOGRADER_USERNAME` -- custom username for autograder API (prevent unauthorized access)
 - `AUTOGRADER_PASSWORD` -- custom password authenticating to autograder API (prevent unauthorized access)
 - `autograder_REPO_SSH_URL` -- git URL of your autograding tests
 - `REPO_PATH_TOASSIGNMENTS` -- path within your GitHub repo which contains the assignments in the format `repo_name/path_to_assignments` where each assignment has the format provided in this repo of `assignment_name/autograder`
@@ -42,10 +42,13 @@ This is the directory structure of our tests in our private autograder repo, whi
 ```
 
 ## Deploying the Application
+
+#### Initial Deployment
+
 After following the configuration steps, you can deploy the manifests into your current namespace by running:
 
 ```
-kubectl apply -k manifests
+oc apply -k manifests
 oc start-build autograder-bc
 ```
 
@@ -53,14 +56,14 @@ oc start-build autograder-bc
 Then after the build finishes, reapply the deployment with the new image:
 
 ```
-kubectl delete -f manifests/deployment.yaml
-kubectl apply -f manifests/deployment.yaml
+oc delete -f manifests/deployment.yaml
+oc apply -f manifests/deployment.yaml
 ```
 
 If you want to see what the manifests look like you can run:
 
 ```
-kubectl kustomize manifests
+oc kustomize manifests
 ```
 
 ## Gradescope 
@@ -70,18 +73,19 @@ Follow the steps provided in [`gradescope/README.md`](gradescope/README.md) to s
 
 ## Deployment Manifests 
 
-- build-config.yaml: Specifies the build config, which creates an image stream to the autograder container.
+**build-config.yaml**: Specifies the build config, which creates an image stream for the autograder container.
 
-- deployment.yaml: Specifies the deployment, which builds the init container as well as the autograder container from the previous image stream.
+**deployment.yaml**: Specifies the deployment, which builds the init container as well as the autograder container from the previous image stream.
 
-- hpa.yaml: Defines the [horizontal pod autoscaler](https://docs.openshift.com/container-platform/4.15/nodes/pods/nodes-pods-autoscaling.html). Scales the deployment based on resource utilization.
+**hpa.yaml**: Defines the [horizontal pod autoscaler](https://docs.openshift.com/container-platform/4.15/nodes/pods/nodes-pods-autoscaling.html). Scales the deployment based on resource utilization.
 
-- image-stream.yaml: Defines the imagestream for the autograder image.
+**image-stream.yaml**: Defines the imagestream for the autograder image.
 
-- kustomization.yaml: Defines the other resources for deployment. Also defines a secret in OpenShift from the ssh-privatekey file.
+**kustomization.yaml**: Defines the other resources for deployment. Also defines a secret in OpenShift from the ssh-privatekey file.
 
-- route.yaml: Specifies the route that the autograder service can be reached at.
+**route.yaml**: Specifies the route that the autograder service can be reached at.
 
-- service.yaml: Defines the autograder service IP, port, and application. 
+**service.yaml**: Defines the autograder service IP, port, and application. 
 
+**externalsecret.yaml**: This pulls the ssh-privatekey from the vault for the init container that pulls the assignments from the private assignments repo.
 

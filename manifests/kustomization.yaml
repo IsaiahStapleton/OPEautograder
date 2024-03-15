@@ -10,16 +10,11 @@ resources:
   - hpa.yaml
   - image-stream.yaml
   - build-config.yaml
+  - externalsecret.yaml
 
 secretGenerator:
   - name: autograder-config
     envs:
       - autograder.env
-    options:
-      disableNameSuffixHash: true
-  - name: autograder-deploy-key
-    type: kubernetes.io/ssh-auth
-    files:
-    - ssh-privatekey
     options:
       disableNameSuffixHash: true

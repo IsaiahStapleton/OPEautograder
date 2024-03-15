@@ -29,13 +29,12 @@ spec:
         - name: autograder_DEPLOY_KEY
           valueFrom:
             secretKeyRef:
-              name: autograder-deploy-key
+              name: ssh-privatekey
               key: ssh-privatekey
         envFrom:
         - secretRef:
             name: autograder-config   
               
-
         command:
         - sh
         - -c
@@ -45,7 +44,7 @@ spec:
           touch ~/.ssh/known_hosts
           echo "${autograder_DEPLOY_KEY}\n" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519" git clone ${autograder_REPO_SSH_URL}
+          GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_ed25519" git clone ${autograder_REPO_SSH_URL}
           rm -rf ~/.ssh/id_ed25519
           find . -type d -name 'solutions' -exec rm -rf {} +
 
