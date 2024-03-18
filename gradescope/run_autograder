@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-LINK="https://autograder-service-ope-test.apps.shift.nerc.mghpcc.org"
+LINK="https://autograder-service-ece440spring2024.apps.shift.nerc.mghpcc.org"
 USERNAME="istaplet"
 PASSWORD="123"
 ASSIGNMENT_NAME="challenge-threads"

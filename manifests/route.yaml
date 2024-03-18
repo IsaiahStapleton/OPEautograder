@@ -7,7 +7,7 @@ metadata:
     haproxy.router.openshift.io/timeout: 10m
     openshift.io/host.generated: 'true'
 spec:
-  host: autograder-service-ope-test.apps.shift.nerc.mghpcc.org
+  host: autograder-service-ece440spring2024.apps.shift.nerc.mghpcc.org
   to:
     kind: Service
     name: autograder-service

@@ -5,7 +5,7 @@ import concurrent.futures
 import json
 import sys
 
-LINK = "https://autograder-service-ope-test.apps.shift.nerc.mghpcc.org"
+LINK = "https://autograder-service-ece440spring2024.apps.shift.nerc.mghpcc.org"
 UNAME_PWD = "istaplet:123"
 
 # request with correct solution
